@@ -17,7 +17,7 @@
         Pré-Matrícula Digital, software livre (AGPL-3.0) desenvolvido pela
         Portabilis ·
         <a
-          href="https://github.com/saraivadev/pre-matricula-digital"
+          href="https://github.com/portabilis/pre-matricula-digital"
           target="_blank"
           rel="noopener"
           class="text-muted"
