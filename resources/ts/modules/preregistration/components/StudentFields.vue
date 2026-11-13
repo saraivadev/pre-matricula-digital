@@ -79,7 +79,7 @@
         label="Série"
         name="grade"
         type="SELECT"
-        :options="grades"
+        :options="gradeOptions"
         :errors="!!errors['grade']"
         :searchable="false"
       />
@@ -695,6 +695,24 @@ export default defineComponent({
     const { grades, suggestedGrades, suggestGrade, suggestedGradesMessage } =
       useStudentProcessAndSuggestGrades(process);
 
+    // Rematrícula: o(a) aluno(a) já tem matrícula, então oferecemos apenas a(s)
+    // série(s) seguinte(s) conforme a sequência de séries do i-Educar.
+    // Sem sequência cadastrada para a série atual, mantém todas as séries.
+    const gradeOptions = computed<Option[]>(() => {
+      const nextGrades =
+        modelStage.value?.type === 'REGISTRATION_RENEWAL'
+          ? modelStudent.value.match?.registration?.nextGrades ?? []
+          : [];
+
+      if (nextGrades.length === 0) {
+        return grades.value;
+      }
+
+      return grades.value.filter((g) =>
+        nextGrades.some((n) => Number(n.id) === Number(g.key))
+      );
+    });
+
     const periods = computed<Option[]>(() => {
       return modelStage.value?.process.periods
         .map((g) => ({ key: g.id, label: g.name }))
@@ -1226,7 +1244,7 @@ export default defineComponent({
       }
     );
 
-    watch(grades, (value) => {
+    watch(gradeOptions, (value) => {
       if (value.length === 1) {
         modelStudent.value.grade = value[0].key as string;
       } else {
@@ -1260,6 +1278,7 @@ export default defineComponent({
       modelFields,
       process,
       grades,
+      gradeOptions,
       periods,
       schools,
       isWaitingList,

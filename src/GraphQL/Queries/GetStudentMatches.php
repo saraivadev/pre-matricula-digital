@@ -11,6 +11,7 @@ use iEducar\Packages\PreMatricula\Models\RegistrationMatch;
 use iEducar\Packages\PreMatricula\Models\School;
 use iEducar\Packages\PreMatricula\Services\Concerns\LegacyPersonStudentFinder;
 use iEducar\Packages\PreMatricula\Support\InitialsFromName;
+use Illuminate\Support\Facades\DB;
 
 class GetStudentMatches
 {
@@ -81,6 +82,7 @@ class GetStudentMatches
                                 'id' => $grade->id,
                                 'name' => $grade->name,
                             ],
+                            'next_grades' => $this->nextGrades($stage, $grade->id),
                             'period' => [
                                 'id' => $period?->id,
                                 'name' => $period?->name,
@@ -101,6 +103,25 @@ class GetStudentMatches
         }
 
         return [];
+    }
+
+    /**
+     * Séries seguintes à série atual do(a) aluno(a), conforme a sequência de
+     * séries do i-Educar (pmieducar.sequencia_serie), limitadas às séries do
+     * processo. Usado na rematrícula para sugerir/restringir a próxima série.
+     */
+    private function nextGrades(ProcessStage $stage, int $gradeId): array
+    {
+        return DB::table('pmieducar.sequencia_serie as ss')
+            ->join('process_grade as pg', 'pg.grade_id', '=', 'ss.ref_serie_destino')
+            ->join('pmieducar.serie as s', 's.cod_serie', '=', 'ss.ref_serie_destino')
+            ->where('ss.ref_serie_origem', $gradeId)
+            ->where('ss.ativo', 1)
+            ->where('pg.process_id', $stage->process_id)
+            ->orderBy('s.nm_serie')
+            ->get(['s.cod_serie as id', 's.nm_serie as name'])
+            ->map(fn ($g) => ['id' => $g->id, 'name' => $g->name])
+            ->toArray();
     }
 
     private function findLegacyPerson(array $data): array

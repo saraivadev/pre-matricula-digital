@@ -56,6 +56,10 @@ export interface Match {
       id: number;
       name: string;
     };
+    nextGrades?: {
+      id: number;
+      name: string;
+    }[];
   };
 }
 

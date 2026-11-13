@@ -5,9 +5,17 @@
   >
     <router-link
       to="/"
-      class="navbar-brand font-size-title-pmd-xs-16 flex-grow-lg-1 pl-0 pl-lg-4"
+      class="navbar-brand font-size-title-pmd-xs-16 flex-grow-lg-1 pl-0 pl-lg-4 d-flex align-items-center"
     >
-      <icon />
+      <!-- Logo da prefeitura (PMD_LOGO) antes da marca do PMD -->
+      <img
+        v-if="hasCustomLogo"
+        :src="store.logo"
+        :alt="`${store.slogan}${store.entity.city}`"
+        class="mr-3 pr-3"
+        style="height: 44px; width: auto; border-right: 1px solid #dee2e6"
+      />
+      <icon class="mr-1" />
       Pré-matrícula Digital
     </router-link>
     <x-btn
@@ -47,6 +55,12 @@ const route = useRoute();
 const store = useGeneralStore();
 
 const isAuthenticated = computed(() => store.isAuthenticated);
+
+// Brasão padrão usado quando PMD_LOGO não é configurado (config/prematricula.php).
+const DEFAULT_LOGO = '/intranet/imagens/brasao-republica.png';
+const hasCustomLogo = computed(
+  () => !!store.logo && store.logo !== DEFAULT_LOGO
+);
 
 const show = ref(false);
 

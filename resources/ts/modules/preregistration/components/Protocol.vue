@@ -32,11 +32,21 @@
                 Pré-matrícula
               </div>
             </div>
+            <!-- Logo cabe na caixa sem distorcer: brasão quadrado ou logo horizontal (PMD_LOGO) -->
             <div
-              class="pull-right text-right"
-              style="width: 120px; height: 90px"
+              class="pull-right text-right ml-2"
+              style="width: 160px; max-width: 45%"
             >
-              <img :src="store.logo" :alt="store.entity.city" height="90" />
+              <img
+                :src="store.logo"
+                :alt="store.entity.city"
+                style="
+                  max-width: 100%;
+                  max-height: 90px;
+                  width: auto;
+                  height: auto;
+                "
+              />
             </div>
             <dl class="mb-0">
               <dt class="mt-3">Código do protocolo</dt>

@@ -212,6 +212,8 @@ type StudentMatchRegistration {
   year: Int!
   school: School!
   grade: Grade!
+  "Séries seguintes à atual, conforme a sequência de séries do i-Educar"
+  nextGrades: [Grade!]! @rename(attribute: "next_grades")
   period: Period
 }
 
