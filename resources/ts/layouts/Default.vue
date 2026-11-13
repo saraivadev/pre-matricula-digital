@@ -9,7 +9,21 @@
       </router-view>
     </main>
     <footer id="footer" class="pt-5 pb-5 text-center text-muted small">
-      © {{ year }} Portábilis - Todos os direitos reservados
+      <div>
+        © {{ year }} Prefeitura Municipal de Colônia do Gurguéia · Implantação
+        e suporte: <strong>Gurgueia Tech</strong>
+      </div>
+      <div class="mt-1">
+        Pré-Matrícula Digital, software livre (AGPL-3.0) desenvolvido pela
+        Portabilis ·
+        <a
+          href="https://github.com/saraivadev/pre-matricula-digital"
+          target="_blank"
+          rel="noopener"
+          class="text-muted"
+          >código-fonte</a
+        >
+      </div>
     </footer>
   </div>
 </template>
